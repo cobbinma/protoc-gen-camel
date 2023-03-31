@@ -13,7 +13,7 @@ go install github.com/cobbinma/protoc-gen-camel
 protoc --camel_out=. example/*.proto
 ```
 
-``sh
+```sh
 example/camel.proto:Field name "one_two" should be camelCase, such as "oneTwo".
 --camel_out: 🐪: 1 total
-``
+```
