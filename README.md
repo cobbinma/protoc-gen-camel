@@ -14,6 +14,7 @@ protoc --camel_out=. example/*.proto
 ```
 
 ```sh
+❯ protoc --camel_out=. example/*.proto
 example/camel.proto:Field name "one_two" should be camelCase, such as "oneTwo".
 --camel_out: 🐪: 1 total
 ```
