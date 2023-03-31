@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package camel;
+
+option go_package = "github.com/cobbinma/protoc-gen-camel/example";
+
+message Foo {
+  int64 one_two = 1;
+}
