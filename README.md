@@ -10,21 +10,26 @@ go install github.com/cobbinma/protoc-gen-camel@latest
 
 ## Usage
 ```sh
-❯ protoc --camel_out=. example/*.proto
+❯ protoc --camel_out=. $(find . -name '*.proto')
 example/camel.proto:Field name "one_two" should be camelCase, such as "oneTwo".
 --camel_out: 🐪: 1 total
 ```
 
 ### Configuration
 
+```yaml
+ignore:
+    - camel.Foo.one_two
+```
+
 generate a configuration file with all violations ignored
 ```sh
-protoc --camel_out=generate=true:. example/*.proto
+protoc --camel_out=generate=true:. $(find . -name '*.proto')
 ```
 
 use the configuration file
 ```sh
-protoc --camel_out=config=camel.yml:. example/*.proto
+protoc --camel_out=config=camel.yml:. $(find . -name '*.proto')
 ```
 
 ### Buf
