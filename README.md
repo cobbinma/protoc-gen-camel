@@ -5,7 +5,7 @@ compiler to check camel case field name violations.
 
 ## Installation
 ```sh
-go install github.com/cobbinma/protoc-gen-camel
+go install github.com/cobbinma/protoc-gen-camel@latest
 ```
 
 ## Usage
