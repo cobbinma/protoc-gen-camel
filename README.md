@@ -26,3 +26,15 @@ use the configuration file
 ```sh
 protoc --camel_out=config=camel.yml:. example/*.proto
 ```
+
+### Buf
+
+```yml
+version: v1
+plugins:
+  - plugin: camel
+    out: .
+    strategy: all
+    opt:
+      - config=camel.yml
+```
