@@ -9,6 +9,13 @@ message_type:  {
     type:  TYPE_INT64
     json_name:  "oneTwo"
   }
+  field:  {
+    name:  "twoThree"
+    number:  2
+    label:  LABEL_OPTIONAL
+    type:  TYPE_INT64
+    json_name:  "twoThree"
+  }
 }
 options:  {
   go_package:  "github.com/cobbinma/protoc-gen-camel/example"
