@@ -7,16 +7,15 @@ import (
 
 	"github.com/iancoleman/strcase"
 	"github.com/samber/lo"
-	"google.golang.org/protobuf/compiler/protogen"
+	"google.golang.org/protobuf/types/descriptorpb"
 )
 
 type FullFieldName string
 
 type Config struct {
-	FileName string
-	Ignore   []FullFieldName
-	Messages []*protogen.Message
-	OutFile  io.Writer
+	Proto   *descriptorpb.FileDescriptorProto
+	Ignore  []FullFieldName
+	OutFile io.Writer
 }
 
 type Violations struct {
@@ -24,15 +23,14 @@ type Violations struct {
 	NotIgnored    []FullFieldName
 }
 
-// LintProtoFile takes a file name, proto file description, and a file.
-// It checks the file for errors and writes them to the output file.
+// LintProtoFile checks a proto file description for camel case field name violations.
 func LintProtoFile(config Config) Violations {
 	violations := Violations{}
-	for _, m := range config.Messages {
-		for _, field := range m.Fields {
-			name := string(field.Desc.Name())
+	for _, message := range config.Proto.GetMessageType() {
+		for _, field := range message.GetField() {
+			name := string(field.GetName())
 			camel := strcase.ToLowerCamel(name)
-			full := FullFieldName(field.Desc.FullName())
+			full := FullFieldName(fmt.Sprintf("%s.%s.%s", config.Proto.GetPackage(), message.GetName(), name))
 			if name == camel {
 				continue
 			}
@@ -40,7 +38,7 @@ func LintProtoFile(config Config) Violations {
 			violations.AllViolations = append(violations.AllViolations, full)
 
 			if !lo.Contains(config.Ignore, full) {
-				fmt.Fprintf(os.Stderr, "%s:Field name \"%s\" should be camelCase, such as \"%s\".\n", config.FileName, name, camel)
+				fmt.Fprintf(os.Stderr, "%s:Field name \"%s\" should be camelCase, such as \"%s\".\n", config.Proto.ProtoReflect().Descriptor().ParentFile().Name(), name, camel)
 
 				violations.NotIgnored = append(violations.NotIgnored, full)
 			}

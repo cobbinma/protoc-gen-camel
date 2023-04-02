@@ -35,11 +35,11 @@ func main() {
 
 		var violations []linter.FullFieldName
 		for _, f := range gen.Files {
+
 			v := linter.LintProtoFile(linter.Config{
-				FileName: *f.Proto.Name,
-				Ignore:   config.Ignore,
-				Messages: f.Messages,
-				OutFile:  os.Stderr,
+				Proto:   f.Proto,
+				Ignore:  config.Ignore,
+				OutFile: os.Stderr,
 			})
 
 			generated.Ignore = append(generated.Ignore, v.AllViolations...)
