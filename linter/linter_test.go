@@ -32,9 +32,6 @@ func TestLintProtoFile(t *testing.T) {
 			json_name:  "twoThree"
 		}
 	}
-	options:  {
-		go_package:  "github.com/cobbinma/protoc-gen-camel/example"
-	}
 	syntax:  "proto3"`), descriptor))
 
 	t.Run("violation without ignore", func(t *testing.T) {
