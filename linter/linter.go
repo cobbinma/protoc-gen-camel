@@ -3,7 +3,6 @@ package linter
 import (
 	"fmt"
 	"io"
-	"os"
 
 	"github.com/iancoleman/strcase"
 	"github.com/samber/lo"
@@ -38,7 +37,7 @@ func LintProtoFile(config Config) Violations {
 			violations.AllViolations = append(violations.AllViolations, full)
 
 			if !lo.Contains(config.Ignore, full) {
-				fmt.Fprintf(os.Stderr, "%s:Field name \"%s\" should be camelCase, such as \"%s\".\n", *config.Proto.Name, name, camel)
+				fmt.Fprintf(config.OutFile, "%s:Field name \"%s\" should be camelCase, such as \"%s\".\n", *config.Proto.Name, name, camel)
 
 				violations.NotIgnored = append(violations.NotIgnored, full)
 			}

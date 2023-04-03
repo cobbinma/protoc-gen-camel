@@ -1,7 +1,7 @@
 package linter_test
 
 import (
-	"io"
+	"bytes"
 	"testing"
 
 	"github.com/cobbinma/protoc-gen-camel/linter"
@@ -35,6 +35,7 @@ func TestLintProtoFile(t *testing.T) {
 	syntax:  "proto3"`), descriptor))
 
 	t.Run("violation without ignore", func(t *testing.T) {
+		var output bytes.Buffer
 		assert.Equal(t, linter.Violations{
 			AllViolations: []linter.FullFieldName{
 				"camel.Foo.one_two",
@@ -44,12 +45,14 @@ func TestLintProtoFile(t *testing.T) {
 			},
 		}, linter.LintProtoFile(linter.Config{
 			Proto:   descriptor,
-			OutFile: io.Discard,
+			OutFile: &output,
 			Ignore:  []linter.FullFieldName{},
 		}))
+		assert.Equal(t, "example/camel.proto:Field name \"one_two\" should be camelCase, such as \"oneTwo\".\n", output.String())
 	})
 
 	t.Run("ignored violation", func(t *testing.T) {
+		var output bytes.Buffer
 		assert.Equal(t, linter.Violations{
 			AllViolations: []linter.FullFieldName{
 				"camel.Foo.one_two",
@@ -57,10 +60,11 @@ func TestLintProtoFile(t *testing.T) {
 			NotIgnored: nil,
 		}, linter.LintProtoFile(linter.Config{
 			Proto:   descriptor,
-			OutFile: io.Discard,
+			OutFile: &output,
 			Ignore: []linter.FullFieldName{
 				"camel.Foo.one_two",
 			},
 		}))
+		assert.Equal(t, "", output.String())
 	})
 }
